@@ -1,8 +1,6 @@
 export class Guest {
   constructor (guest) {
     this.id = guest.id
-    this.pastBookings = guest.pastBookings
+    this.name = guest.name
   }
-  id
-  pastBookings
 }

@@ -1,0 +1,9 @@
+
+class RoomStore {
+  rooms
+
+  constructor() {
+
+  }
+
+}

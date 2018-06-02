@@ -1,5 +1,5 @@
 import { Guest } from '../Entities'
-
+import { action, observable, decorate, computed } from 'mobx'
 class GuestStore {
   //
   guests = []
@@ -23,12 +23,18 @@ class GuestStore {
     })
 
     this.guests = this.guests.concat(guests)
+    console.log(this.guests)
   }
 
   get currentTotalGuests () {
-    return this.guests.length
+    return this.guests && this.guests.length
   }
 }
+
+decorate(GuestStore, {
+  guests: observable,
+  currentTotalGuests: computed,
+})
 
 export default GuestStore
 

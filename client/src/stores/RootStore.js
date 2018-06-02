@@ -4,6 +4,7 @@ import GuestStore from './GuestStore'
 import { Guest } from '../Entities'
 
 class RootStore {
+  sideBarSelection = 'search'
   constructor(transport) {
     this.transport = transport
     this.guestStore = new GuestStore()
@@ -16,7 +17,7 @@ class RootStore {
   }
 
   fetchUniqueGuests = () => {
-    this.transport.get().then(rawGuests => {
+    this.transport.get('api/guests').then(rawGuests => {
       const guests = rawGuests.map(guest => {
         return new Guest(guest)
       })
@@ -29,11 +30,15 @@ class RootStore {
   }
 
   get uniqueGuests() {
-    return this.guestStore.currentTotalGuests
+    return this.guestStore && this.guestStore.currentTotalGuests
   }
 
   get totalBookings() {
-    return this.bookingStore.currentTotalBookings
+    return this.bookingStore && this.bookingStore.currentTotalBookings
+  }
+
+  onSidebarChange = (name) => {
+    this.sideBarSelection = name
   }
 }
 
@@ -41,6 +46,8 @@ decorate(RootStore, {
   uniqueGuests: computed,
   totalBookings: computed,
   fetchUniqueGuests: action.bound,
+  sideBarSelection: observable,
+  onSidebarChange: action.bound,
 })
 
 export default RootStore
