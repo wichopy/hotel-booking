@@ -13,10 +13,10 @@ const mockHTTP = {
             break;
           case 'api/rooms':
             result = [
-              { id: 1, number: 101, status: 'booked'},
-              { id: 2, number: 102, status: 'booked'},
-              { id: 3, number: 202, status: 'booked'},
-              { id: 4, number: 406, status: 'booked'},
+              { id: 1, number: 101 },
+              { id: 2, number: 102 },
+              { id: 3, number: 202 },
+              { id: 4, number: 406 },
             ]
             break;
           case 'api/booking':
@@ -28,6 +28,14 @@ const mockHTTP = {
                 status: 'confirmed',
                 guestId: 1,
                 roomId: 1,
+              },
+              {
+                id: 'bac34',
+                checkIn: '2018-01-01',
+                checkOut: '2018-01-02',
+                status: 'cancelled',
+                guestId: 4,
+                roomId: 3,
               }
             ]
           default:

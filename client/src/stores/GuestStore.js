@@ -14,7 +14,7 @@ class GuestStore {
       throw new Error('Must be an array')
     }
     if (guests.length === 0) {
-      throw new Error('Cannot be an empty array')
+      return
     }
     guests.forEach(guest => {
       if (guest instanceof Guest !== true) {
@@ -23,7 +23,6 @@ class GuestStore {
     })
 
     this.guests = this.guests.concat(guests)
-    console.log(this.guests)
   }
 
   get currentTotalGuests () {
@@ -34,6 +33,7 @@ class GuestStore {
 decorate(GuestStore, {
   guests: observable,
   currentTotalGuests: computed,
+  add: action.bound,
 })
 
 export default GuestStore

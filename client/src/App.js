@@ -3,12 +3,15 @@ import './App.css';
 import styled from 'styled-components';
 import DateItem from './components/DateItem'
 import GuestHistory from './components/GuestHistory'
+import RoomRow from './components/RoomRow'
+
 import logo from './hotel-alfred.png'
 import { inject, observer } from 'mobx-react'
 import DevTools from 'mobx-react-devtools'
 
 // Grid container.
 const MainContainer = styled.div`
+  padding: 1em;
   width: 100%;
   background-color: #7064AD;
   display: grid;
@@ -25,6 +28,7 @@ grid-row-start: row1-start;
 grid-row-end: row1-end;
 `;
 
+// Grid Item
 const SidebarContainer = styled.div`
 grid-column-start: line2;
 grid-column-end: end;
@@ -36,17 +40,20 @@ const Header = styled.div`
   width: 100%;
   height: 100px;
   background-color: #32248a;
-  display: inline-block;
+  text-align: center;
 `;
 
 class App extends Component {
   componentDidMount() {
+    // Gather all the datas
     this.props.RootStore.fetchUniqueGuests()
+    this.props.RootStore.fetchAllRooms()
   }
 
   onSidebarClick = (ev) => {
     this.props.RootStore.onSidebarChange(ev.target.name)
   }
+
   render() {
     const pastBookings = [
       { date: 'Nov 1 2012', room: 103 },
@@ -55,6 +62,7 @@ class App extends Component {
       { date: 'Nov 30 2015', room: 203 },
       { date: 'Nov 30 2015', room: 406 },
     ]
+
     return (
       <div className="App">
         <DevTools/>
@@ -91,6 +99,19 @@ class App extends Component {
               <div className="date-item">booked</div>
               <div className="date-item">booked</div>
             </div>
+            <RoomRow
+              roomNumber="322"
+              sun={'booked'}
+              mon={'booked'}
+              tues={'vacant'}
+              wed={'vacant'}
+              thurs={'vacant'}
+              fri={'vacant'}
+              sat={'booked'}
+            />
+            {this.props.RootStore.roomStore.rooms.map(room => {
+              return <RoomRow key={room.id} roomNumber={room.number}/>
+            })}
           </CalendarContainer>
           <SidebarContainer>
             <span>
