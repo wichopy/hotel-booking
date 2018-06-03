@@ -4,13 +4,13 @@ const RoomRow = ({ roomNumber, sun, mon, tues, wed, thurs, fri, sat}) => {
   return (
     <div className="row">
       <div className="room-item">{roomNumber}</div>
-      <DateItem status={sun} />
-      <DateItem status={mon} />
-      <DateItem status={tues} />
-      <DateItem status={wed} />
-      <DateItem status={thurs} />
-      <DateItem status={fri} />
-      <DateItem status={sat} />
+      <DateItem guestAndBooking={sun} />
+      <DateItem guestAndBooking={mon} />
+      <DateItem guestAndBooking={tues} />
+      <DateItem guestAndBooking={wed} />
+      <DateItem guestAndBooking={thurs} />
+      <DateItem guestAndBooking={fri} />
+      <DateItem guestAndBooking={sat} />
     </div>
   )
 }
