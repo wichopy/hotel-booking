@@ -15,6 +15,8 @@ const MainContainer = styled.div`
   color: e3e3e3;
   grid-template-columns: [first] auto [line2] 300px [end];
   grid-template-rows: [row1-start] 100% [row1-end];
+  grid-column-gap: 8px;
+  grid-row-gap: 8px;
 `;
 
 // Grid Item
