@@ -16,13 +16,11 @@ const DateItemDivVacant = styled.div`
 `;
 
 const DateItem = ({ status, name }) => {
-  let Wrapper
+  let Wrapper = DateItemDivVacant
   if (status === 'booked') {
     Wrapper = DateItemDivBooked
-  } else {
-    Wrapper = DateItemDivVacant
   }
-  // vacant by default if no status.
+
   return (
     <Wrapper>
       Status: {status || 'vacant'}
