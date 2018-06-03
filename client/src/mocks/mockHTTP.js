@@ -51,7 +51,7 @@ const mockHTTP = {
           default:
             result = []
         }
-        return res(result)
+        return res({ data: result })
       }, 500)
     })
   }

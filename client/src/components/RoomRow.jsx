@@ -1,16 +1,16 @@
 import React from 'react'
 import DateItem from './DateItem'
-const RoomRow = ({ roomNumber, sun, mon, tues, wed, thurs, fri, sat}) => {
+const RoomRow = ({ room, sun, mon, tues, wed, thurs, fri, sat}) => {
   return (
     <div className="row">
-      <div className="room-item">{roomNumber}</div>
-      <DateItem guestAndBooking={sun} />
-      <DateItem guestAndBooking={mon} />
-      <DateItem guestAndBooking={tues} />
-      <DateItem guestAndBooking={wed} />
-      <DateItem guestAndBooking={thurs} />
-      <DateItem guestAndBooking={fri} />
-      <DateItem guestAndBooking={sat} />
+      <div className="room-item">{room.number}</div>
+      <DateItem guestAndBooking={sun} room={room}  />
+      <DateItem guestAndBooking={mon} room={room}  />
+      <DateItem guestAndBooking={tues} room={room} />
+      <DateItem guestAndBooking={wed} room={room}  />
+      <DateItem guestAndBooking={thurs} room={room}  />
+      <DateItem guestAndBooking={fri} room={room}  />
+      <DateItem guestAndBooking={sat} room={room}  />
     </div>
   )
 }

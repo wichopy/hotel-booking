@@ -72,7 +72,7 @@ class App extends Component {
           </span>
         </Header>
         <section>
-          Unique guests: {this.props.RootStore.guestStore.currentTotalGuests}
+          Unique guests: {this.props.RootStore.uniqueGuests}
           Total overall bookings: {this.props.RootStore.bookingStore.currentTotalBookings}
           Total bookings for today: 34/100
           Total bookings for the next month: 2084/3000
@@ -89,10 +89,10 @@ class App extends Component {
               }
             </div>
             {this.props.RootStore.ready && this.props.RootStore.roomStore.rooms.map(room => {
-              const bookings = this.props.RootStore.bookingsAndGuestsForRoomByWeek(room.id)
+              let bookings = this.props.RootStore.bookingsAndGuestsForRoomByWeek(room.id)
               return <RoomRow
                 key={room.id}
-                roomNumber={room.number}
+                room={room}
                 sun={bookings[0]}
                 mon={bookings[1]}
                 tues={bookings[2]}

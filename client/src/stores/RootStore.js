@@ -1,4 +1,4 @@
-import { action, observable, decorate, computed } from 'mobx'
+import { action, observable, decorate, computed, transaction } from 'mobx'
 import BookingStore from './BookingStore'
 import GuestStore from './GuestStore'
 import RoomStore from './RoomStore'
@@ -14,14 +14,21 @@ const momentRange = extendMoment(moment)
 class RootStore {
   // @observable
   sideBarSelection = 'search'
+  // @observable
   currentDateRange
+  // @obserable
   ready = false
+  // @obserable
+  roomToBook
+  // @obserable
+  bookOnDate
   constructor(transport) {
     this.transport = transport
     this.guestStore = new GuestStore(this.transport)
     this.bookingStore = new BookingStore(this.transport)
     this.roomStore = new RoomStore(this.transport)
 
+    // TODO: Handle any date. To keep scope narrow, only handle the current week we are on.
     this.currentDateRange = Array.from(
       momentRange.range(
         moment().startOf('isoWeek'),
@@ -42,7 +49,8 @@ class RootStore {
 
   // @action
   fetchAllGuests = () => {
-    return this.transport.get('api/guests').then(rawGuests => {
+    return this.transport.get('api/guests').then(res => {
+      let rawGuests = res.data
       const guests = rawGuests.map(guest => {
         return new Guest(guest)
       })
@@ -52,7 +60,8 @@ class RootStore {
 
   // @action
   fetchAllRooms = () => {
-    return this.transport.get('api/rooms').then(rawRooms => {
+    return this.transport.get('api/rooms').then(res => {
+      let rawRooms = res.data
       const rooms = rawRooms.map(room => {
         return new Room(room)
       })
@@ -62,7 +71,8 @@ class RootStore {
 
   fetchAllBookings = () => {
     // This should only fetch the bookings for a specific range, the default should be for the current week.
-    return this.transport.get('api/bookings').then(rawBookings => {
+    return this.transport.get('api/bookings').then(res => {
+      let rawBookings = res.data
       const bookings = rawBookings.map(booking => {
         return new Booking(booking)
       })
@@ -90,17 +100,29 @@ class RootStore {
       .map(day => {
         const guestAndBooking = this.guestAndBookingForDayAndRoom(day.format('YYYY-MM-DD'), roomId)
         const { guest, booking } = guestAndBooking
+        let selected = false
+        if (roomId === this.roomToBook && day.format('YYYY-MM-DD') === this.bookOnDate) {
+          selected = true
+        }
         return {
           date: day.format('YYYY-MM-DD'),
           guest,
           booking,
+          selected,
         }
       })
   }
 
   // @computed
   get uniqueGuests() {
-    return this.guestStore && this.guestStore.currentTotalGuests
+    const uniqueGuestsTable = {}
+    this.bookingStore.bookings.forEach(booking => {
+      if (!uniqueGuestsTable[booking.guestId]) {
+        uniqueGuestsTable[booking.guestId] = 1
+      }
+    })
+
+    return Object.keys(uniqueGuestsTable).length
   }
 
   // @computed
@@ -112,6 +134,17 @@ class RootStore {
   onSidebarChange = (name) => {
     this.sideBarSelection = name
   }
+
+  // @action
+  addNewBooking = (roomId, date) => {
+    // Prevent multiple renders, state mutations inside of transaction are ignored by observable tracker.
+    transaction(() => {
+      this.roomToBook = roomId
+      this.bookOnDate = date
+    })
+    this.sideBarSelection = 'bookingForm'
+  }
+
 }
 
 decorate(RootStore, {
@@ -122,6 +155,9 @@ decorate(RootStore, {
   sideBarSelection: observable,
   onSidebarChange: action.bound,
   ready: observable,
+  currentDateRange: observable,
+  roomToBook: observable,
+  bookOnDate: observable,
 })
 
 export default RootStore
