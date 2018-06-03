@@ -40,8 +40,7 @@ export class Booking {
     this.guestId = booking.guestId
     this.roomId = booking.roomId
     this.momentRange = momentRange.range(this.checkIn, this.checkOut)
-    this.range = Array.from(this.momentRange.by('day'))
-    this.range = this.range.map(day => day.format('YYYY-MM-DD'))
+    this.range = Array.from(this.momentRange.by('day')).map(day => day.format('YYYY-MM-DD'))
   }
 
   requiredFields = ['id', 'status', 'guestId', 'roomId']
