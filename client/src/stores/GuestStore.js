@@ -1,13 +1,14 @@
 import { Guest } from '../Entities'
 import { action, observable, decorate, computed } from 'mobx'
 class GuestStore {
-  //
+  // @observable
   guests = []
 
   constructor() {
 
   }
 
+  // @action
   // expects an array of Guests
   add (guests) {
     if (!Array.isArray(guests)) {
@@ -25,6 +26,7 @@ class GuestStore {
     this.guests = this.guests.concat(guests)
   }
 
+  // @computed
   get currentTotalGuests () {
     return this.guests && this.guests.length
   }

@@ -8,6 +8,7 @@ import { Guest, Room } from '../Entities'
 // Decorators currently aren't an approved standard and requires config in babel to enable their use.
 // To see the decorators for each Store, consult the decorate function at the bottom of each file before the export.
 class RootStore {
+  // @observable
   sideBarSelection = 'search'
   constructor(transport) {
     this.transport = transport
@@ -55,6 +56,7 @@ class RootStore {
     return this.bookingStore && this.bookingStore.currentTotalBookings
   }
 
+  // @action
   onSidebarChange = (name) => {
     this.sideBarSelection = name
   }
