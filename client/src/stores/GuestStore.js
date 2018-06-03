@@ -8,9 +8,7 @@ class GuestStore {
 
   }
 
-  // @action
-  // expects an array of Guests
-  add (guests) {
+  cache (guests) {
     if (!Array.isArray(guests)) {
       throw new Error('Must be an array')
     }
@@ -26,6 +24,16 @@ class GuestStore {
     this.guests = this.guests.concat(guests)
   }
 
+  // @action
+  // expects an array of Guests
+  add (guests) {
+
+  }
+
+  byId = (id) => {
+    return this.guests.find(guest => guest.id === id)
+  }
+
   // @computed
   get currentTotalGuests () {
     return this.guests && this.guests.length
@@ -33,6 +41,7 @@ class GuestStore {
 }
 
 decorate(GuestStore, {
+  cache: action.bound,
   guests: observable,
   currentTotalGuests: computed,
   add: action.bound,

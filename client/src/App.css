@@ -14,6 +14,7 @@
 
 .room-header {
   width: 16%;
+  border: 1px solid black;
 }
 
 .room-item {
@@ -23,6 +24,7 @@
 
 .date-header {
   width: 12%;
+  border: 1px solid black;
 }
 
 .date-item {

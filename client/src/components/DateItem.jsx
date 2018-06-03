@@ -4,7 +4,14 @@ import styled from 'styled-components'
 const DateItemDivBooked = styled.div`
   width: 12%;
   cursor: pointer;
-  background: #68AB63;
+  background-color: #68AB63;
+  border: 1px solid black;
+`;
+
+const DateItemDivCancelled = styled.div`
+  width: 12%;
+  cursor: pointer;
+  background: red;
   border: 1px solid black;
 `;
 
@@ -15,16 +22,20 @@ const DateItemDivVacant = styled.div`
   border: 1px solid black;
 `;
 
-const DateItem = ({ status, name }) => {
+const DateItem = ({ guestAndBooking }) => {
+  const { guest, booking } = guestAndBooking
   let Wrapper = DateItemDivVacant
-  if (status === 'booked') {
+  if (booking && booking.status === 'confirmed') {
     Wrapper = DateItemDivBooked
   }
 
+  if (booking && booking.status === 'cancelled') {
+    Wrapper = DateItemDivCancelled
+  }
   return (
     <Wrapper>
-      Status: {status || 'vacant'}
-      { name && <span>{name}</span> }
+      <p>Status: {(booking && booking.status) || 'vacant'}</p>
+      <p>{ guest && guest.name && <span>{guest.name}</span> }</p>
     </Wrapper>
   )
 }

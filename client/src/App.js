@@ -48,10 +48,9 @@ const Header = styled.div`
 class App extends Component {
   componentDidMount() {
     // Gather all the datas
-    this.props.RootStore.fetchUniqueGuests()
-    this.props.RootStore.fetchAllRooms()
+    this.props.RootStore.fetchAll()
   }
-
+  calendarHeaderFormat = 'ddd MMM DD'
   onSidebarClick = (ev) => {
     this.props.RootStore.onSidebarChange(ev.target.name)
   }
@@ -64,7 +63,6 @@ class App extends Component {
       { date: 'Nov 30 2015', room: 203 },
       { date: 'Nov 30 2015', room: 406 },
     ]
-
     return (
       <div className="App">
         <DevTools/>
@@ -75,6 +73,7 @@ class App extends Component {
         </Header>
         <section>
           Unique guests: {this.props.RootStore.guestStore.currentTotalGuests}
+          Total overall bookings: {this.props.RootStore.bookingStore.currentTotalBookings}
           Total bookings for today: 34/100
           Total bookings for the next month: 2084/3000
         </section>
@@ -83,36 +82,25 @@ class App extends Component {
             <h2>Calendar</h2>
             <div className="header">
               <div className="room-header">Room Number</div>
-              <div className="date-header">Sunday</div>
-              <div className="date-header">Monday</div>
-              <div className="date-header">Tuesday</div>
-              <div className="date-header">Wednesday</div>
-              <div className="date-header">Thursday</div>
-              <div className="date-header">Friday</div>
-              <div className="date-header">Saturday</div>
+              {
+                this.props.RootStore.currentDateRange && this.props.RootStore.currentDateRange.map((date, i) => {
+                  return <div key={i} className="date-header">{date.format(this.calendarHeaderFormat)}</div>
+                })
+              }
             </div>
-            <div className="row">
-              <div className="room-item">101</div>
-              <DateItem status="booked" />
-              <div className="date-item">vacant</div>
-              <div className="date-item">booked</div>
-              <div className="date-item">booked</div>
-              <div className="date-item">booked</div>
-              <div className="date-item">booked</div>
-              <div className="date-item">booked</div>
-            </div>
-            <RoomRow
-              roomNumber="322"
-              sun={'booked'}
-              mon={'booked'}
-              tues={'vacant'}
-              wed={'vacant'}
-              thurs={'vacant'}
-              fri={'vacant'}
-              sat={'booked'}
-            />
-            {this.props.RootStore.roomStore.rooms.map(room => {
-              return <RoomRow key={room.id} roomNumber={room.number}/>
+            {this.props.RootStore.ready && this.props.RootStore.roomStore.rooms.map(room => {
+              const bookings = this.props.RootStore.bookingsAndGuestsForRoomByWeek(room.id)
+              return <RoomRow
+                key={room.id}
+                roomNumber={room.number}
+                sun={bookings[0]}
+                mon={bookings[1]}
+                tues={bookings[2]}
+                wed={bookings[3]}
+                thurs={bookings[4]}
+                fri={bookings[5]}
+                sat={bookings[6]}
+              />
             })}
           </CalendarContainer>
           <SidebarContainer>
