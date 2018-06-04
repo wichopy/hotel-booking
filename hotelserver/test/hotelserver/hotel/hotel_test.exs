@@ -70,4 +70,64 @@ defmodule Hotelserver.HotelTest do
       assert %Ecto.Changeset{} = Hotel.change_booking(booking)
     end
   end
+
+  describe "guests" do
+    alias Hotelserver.Hotel.Guest
+
+    @valid_attrs %{name: "some name"}
+    @update_attrs %{name: "some updated name"}
+    @invalid_attrs %{name: nil}
+
+    def guest_fixture(attrs \\ %{}) do
+      {:ok, guest} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Hotel.create_guest()
+
+      guest
+    end
+
+    test "list_guests/0 returns all guests" do
+      guest = guest_fixture()
+      assert Hotel.list_guests() == [guest]
+    end
+
+    test "get_guest!/1 returns the guest with given id" do
+      guest = guest_fixture()
+      assert Hotel.get_guest!(guest.id) == guest
+    end
+
+    test "create_guest/1 with valid data creates a guest" do
+      assert {:ok, %Guest{} = guest} = Hotel.create_guest(@valid_attrs)
+      assert guest.name == "some name"
+    end
+
+    test "create_guest/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Hotel.create_guest(@invalid_attrs)
+    end
+
+    test "update_guest/2 with valid data updates the guest" do
+      guest = guest_fixture()
+      assert {:ok, guest} = Hotel.update_guest(guest, @update_attrs)
+      assert %Guest{} = guest
+      assert guest.name == "some updated name"
+    end
+
+    test "update_guest/2 with invalid data returns error changeset" do
+      guest = guest_fixture()
+      assert {:error, %Ecto.Changeset{}} = Hotel.update_guest(guest, @invalid_attrs)
+      assert guest == Hotel.get_guest!(guest.id)
+    end
+
+    test "delete_guest/1 deletes the guest" do
+      guest = guest_fixture()
+      assert {:ok, %Guest{}} = Hotel.delete_guest(guest)
+      assert_raise Ecto.NoResultsError, fn -> Hotel.get_guest!(guest.id) end
+    end
+
+    test "change_guest/1 returns a guest changeset" do
+      guest = guest_fixture()
+      assert %Ecto.Changeset{} = Hotel.change_guest(guest)
+    end
+  end
 end
