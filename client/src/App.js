@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import DateItem from './components/DateItem'
 import GuestHistory from './components/GuestHistory'
 import RoomRow from './components/RoomRow'
-
+import CalendarLoader from './components/CalendarLoader'
 import logo from './hotel-alfred.png'
 import { inject, observer } from 'mobx-react'
 import DevTools from 'mobx-react-devtools'
@@ -79,20 +79,26 @@ class App extends Component {
                 })
               }
             </div>
-            {this.props.RootStore.ready && this.props.RootStore.roomStore.rooms.map(room => {
-              let bookings = this.props.RootStore.bookingsAndGuestsForRoomByWeek(room.id)
-              return <RoomRow
-                key={room.id}
-                room={room}
-                sun={bookings[0]}
-                mon={bookings[1]}
-                tues={bookings[2]}
-                wed={bookings[3]}
-                thurs={bookings[4]}
-                fri={bookings[5]}
-                sat={bookings[6]}
-              />
-            })}
+            {
+              !this.props.RootStore.ready &&
+              <CalendarLoader />
+            }
+            {
+              this.props.RootStore.ready && this.props.RootStore.roomStore.rooms.map(room => {
+                let bookings = this.props.RootStore.bookingsAndGuestsForRoomByWeek(room.id)
+                return <RoomRow
+                  key={room.id}
+                  room={room}
+                  sun={bookings[0]}
+                  mon={bookings[1]}
+                  tues={bookings[2]}
+                  wed={bookings[3]}
+                  thurs={bookings[4]}
+                  fri={bookings[5]}
+                  sat={bookings[6]}
+                />
+              })
+            }
           </CalendarContainer>
           <SidebarContainer>
             <span>

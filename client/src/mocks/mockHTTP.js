@@ -67,7 +67,7 @@ const mockHTTP = {
             result = []
         }
         return res({ data: result })
-      }, 500)
+      }, 2000)
     })
   }
 }
