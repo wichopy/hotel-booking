@@ -28,6 +28,21 @@ const mockHTTP = {
               { id: 12,  number: 304 },
             ]
             break;
+          case 'api/bookings/?guest=1':
+            result = [
+                { date: 'Nov 1 2012', room: 103 },
+                { date: 'Nov 6 2013', room: 405 },
+                { date: 'Nov 23 2014', room: 303 },
+                { date: 'Nov 30 2015', room: 203 },
+                { date: 'Nov 30 2015', room: 406 },
+            ]
+            break;
+          case 'api/bookings/?guest=4':
+            result = [
+                { date: 'Nov 1 2012', room: 101 },
+                { date: 'Nov 2 2013', room: 405 },
+            ]
+            break;
           case 'api/bookings':
             result = [
               {

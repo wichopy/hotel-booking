@@ -1,4 +1,4 @@
-import { action, observable, decorate, computed, transaction } from 'mobx'
+import { action, observable, decorate, computed, transaction, reaction } from 'mobx'
 import BookingStore from './BookingStore'
 import GuestStore from './GuestStore'
 import RoomStore from './RoomStore'
@@ -22,6 +22,10 @@ class RootStore {
   roomToBook
   // @obserable
   bookOnDate
+  // @observable
+  guestProfileId
+  // @observable
+  pastBookings
   constructor(transport) {
     this.transport = transport
     this.guestStore = new GuestStore(this.transport)
@@ -34,6 +38,14 @@ class RootStore {
         moment().startOf('isoWeek'),
         moment().endOf('isoWeek')
       ).by('day')
+    )
+    // When guestProfileId changes, fetch their past bookings
+    reaction(
+      () => this.guestProfileId,
+      (guestId) => {
+        this.pastBookings = undefined
+        this.fetchGuestBookingHistory(guestId)
+      }
     )
   }
 
@@ -55,6 +67,13 @@ class RootStore {
         return new Guest(guest)
       })
       this.guestStore.cache(guests)
+    })
+  }
+
+  //@action
+  fetchGuestBookingHistory = (guestId) => {
+    return this.transport.get('api/bookings/?guest=' + guestId).then(res => {
+      this.pastBookings = res.data
     })
   }
 
@@ -145,6 +164,17 @@ class RootStore {
     this.sideBarSelection = 'bookingForm'
   }
 
+  // @action
+  selectGuestProfile = (guestId) => {
+    this.guestProfileId = guestId
+    this.sideBarSelection = 'guestHistory'
+  }
+
+  get selectedGuestName() {
+    const selectedGuest = this.guestStore.byId(this.guestProfileId)
+    return selectedGuest && selectedGuest.name
+  }
+
 }
 
 decorate(RootStore, {
@@ -158,6 +188,9 @@ decorate(RootStore, {
   currentDateRange: observable,
   roomToBook: observable,
   bookOnDate: observable,
+  guestProfileId: observable,
+  pastBookings: observable,
+  selectedGuestName: computed,
 })
 
 export default RootStore

@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { inject } from 'mobx-react'
+import NameSelector from './NameSelector'
+
 const DateItemDivBooked = styled.div`
   width: 12%;
   cursor: pointer;
@@ -47,7 +49,7 @@ const DateItem = ({ guestAndBooking, room, RootStore }) => {
   return (
     <Wrapper onClick={!booking && (() => { RootStore.addNewBooking(room.id, date)}) }>
       <p>Status: {(booking && booking.status) || 'vacant'}</p>
-      <p>{ guest && guest.name && <span>{guest.name}</span> }</p>
+      <NameSelector guest={guest}/>
     </Wrapper>
   )
 }

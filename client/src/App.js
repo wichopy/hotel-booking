@@ -56,13 +56,6 @@ class App extends Component {
   }
 
   render() {
-    const pastBookings = [
-      { date: 'Nov 1 2012', room: 103 },
-      { date: 'Nov 6 2013', room: 405 },
-      { date: 'Nov 23 2014', room: 303 },
-      { date: 'Nov 30 2015', room: 203 },
-      { date: 'Nov 30 2015', room: 406 },
-    ]
     return (
       <div className="App">
         <DevTools/>
@@ -74,8 +67,6 @@ class App extends Component {
         <section>
           Unique guests: {this.props.RootStore.uniqueGuests}
           Total overall bookings: {this.props.RootStore.bookingStore.currentTotalBookings}
-          Total bookings for today: 34/100
-          Total bookings for the next month: 2084/3000
         </section>
         <MainContainer>
           <CalendarContainer>
@@ -115,9 +106,8 @@ class App extends Component {
             }
             { this.props.RootStore.sideBarSelection === "guestHistory" &&
               <GuestHistory
-                name="John Doe"
-                totalVisits={pastBookings.length}
-                pastBookings={pastBookings}
+                name={this.props.RootStore.selectedGuestName}
+                pastBookings={this.props.RootStore.pastBookings}
               />
             }
             {
