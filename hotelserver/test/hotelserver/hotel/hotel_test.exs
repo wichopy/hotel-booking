@@ -130,4 +130,64 @@ defmodule Hotelserver.HotelTest do
       assert %Ecto.Changeset{} = Hotel.change_guest(guest)
     end
   end
+
+  describe "rooms" do
+    alias Hotelserver.Hotel.Room
+
+    @valid_attrs %{number: 42}
+    @update_attrs %{number: 43}
+    @invalid_attrs %{number: nil}
+
+    def room_fixture(attrs \\ %{}) do
+      {:ok, room} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Hotel.create_room()
+
+      room
+    end
+
+    test "list_rooms/0 returns all rooms" do
+      room = room_fixture()
+      assert Hotel.list_rooms() == [room]
+    end
+
+    test "get_room!/1 returns the room with given id" do
+      room = room_fixture()
+      assert Hotel.get_room!(room.id) == room
+    end
+
+    test "create_room/1 with valid data creates a room" do
+      assert {:ok, %Room{} = room} = Hotel.create_room(@valid_attrs)
+      assert room.number == 42
+    end
+
+    test "create_room/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Hotel.create_room(@invalid_attrs)
+    end
+
+    test "update_room/2 with valid data updates the room" do
+      room = room_fixture()
+      assert {:ok, room} = Hotel.update_room(room, @update_attrs)
+      assert %Room{} = room
+      assert room.number == 43
+    end
+
+    test "update_room/2 with invalid data returns error changeset" do
+      room = room_fixture()
+      assert {:error, %Ecto.Changeset{}} = Hotel.update_room(room, @invalid_attrs)
+      assert room == Hotel.get_room!(room.id)
+    end
+
+    test "delete_room/1 deletes the room" do
+      room = room_fixture()
+      assert {:ok, %Room{}} = Hotel.delete_room(room)
+      assert_raise Ecto.NoResultsError, fn -> Hotel.get_room!(room.id) end
+    end
+
+    test "change_room/1 returns a room changeset" do
+      room = room_fixture()
+      assert %Ecto.Changeset{} = Hotel.change_room(room)
+    end
+  end
 end
