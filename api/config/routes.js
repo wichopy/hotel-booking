@@ -47,6 +47,9 @@ module.exports.routes = {
   'GET /user/login': 'UserController.login',
   'POST /booking/new': 'BookingController.new',
   'GET /guest/total': 'GuestController.total',
+  'GET /booking/total/:type': 'BookingController.total',
+  // For getting the count of all bookings with no criteria specified, otherwise the magic route for GET will assume `total` is an id for a booking.
+  'GET /booking/total': 'BookingController.total',
 
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗

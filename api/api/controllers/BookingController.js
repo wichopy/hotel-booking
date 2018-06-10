@@ -51,6 +51,19 @@ module.exports = {
     const booking = await Booking.create(initialValues).fetch()
     return res.json(booking)
 
+  },
+
+  total: async (req, res) => {
+    const type = req.param('type')
+    let count
+    if (type) {
+      count = await Booking.count({ status: type })
+    } else {
+      count = await Booking.count({})
+    }
+
+    sails.log(`Found ${type ? type : 'all'} bookings total of : + ${count}`)
+    return res.json(count)
   }
 };
 
