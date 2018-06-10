@@ -11,6 +11,11 @@ module.exports = {
     const guest = await Guest.findOne({ id: req.param('id')})
       .populate('bookings')
     res.json(guest)
+  },
+  total: async (req, res) => {
+    const guestCount = await Guest.count({})
+    sails.log('Found a total of :' + guestCount)
+    return res.json(guestCount)
   }
 };
 
