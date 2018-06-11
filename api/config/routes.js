@@ -51,6 +51,7 @@ module.exports.routes = {
   // For getting the count of all bookings with no criteria specified, otherwise the magic route for GET will assume `total` is an id for a booking.
   'GET /booking/total': 'BookingController.total',
   'GET /guest/:id/total-visits': 'GuestController.total-visits',
+  'POST /room/availability': 'RoomController.availability',
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗

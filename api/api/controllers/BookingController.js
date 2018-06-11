@@ -5,6 +5,8 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 const moment = require('moment')
+const MomentRange = require('moment-range')
+const momentRange = MomentRange.extendMoment(moment)
 
 module.exports = {
 
@@ -13,14 +15,13 @@ module.exports = {
   new: async function(req, res) {
     const checkIn = req.param('checkIn')
     const checkOut = req.param('checkOut')
-    // FIXME: This check is currently not working.
-    const roomAvailability = await Room.find({
-        checkIn: { '>=': new Date(moment(checkIn).toISOString()), '<=': new Date(moment(checkOut).toISOString()) },
-        checkOut: { '>=': new Date(moment(checkIn).toISOString()), '<=': new Date(moment(checkOut).toISOString()) },
-    })
+    // TODO: Verify the room the user is trying to book is available.
+    // const roomAvailability = await Booking.find({
+    //     checkIn: { '>=': new Date(moment(checkIn).toISOString()), '<=': new Date(moment(checkOut).toISOString()) },
+    //     checkOut: { '>=': new Date(moment(checkIn).toISOString()), '<=': new Date(moment(checkOut).toISOString()) },
+    // })
 
-    console.log('room availability:', roomAvailability)
-    // If room availability is not an empty array, then the date is not available.
+    // console.log('room availability:', roomAvailability)
 
     const guest = await Guest
       .findOne({
@@ -64,6 +65,6 @@ module.exports = {
 
     sails.log(`Found ${type ? type : 'all'} bookings total of : + ${count}`)
     return res.json(count)
-  }
+  },
 };
 
